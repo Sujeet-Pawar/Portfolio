@@ -234,8 +234,9 @@ The backend runs with **gunicorn** (a production WSGI server) and binds to the `
 
 1. After the backend deploys, copy its URL, e.g. `https://portfolio-backend.onrender.com`.
 2. Point the frontend at it (pick one):
-   - **Netlify (recommended):** Netlify → your site → **Site configuration → Environment variables** → add `VITE_API_URL=https://portfolio-backend.onrender.com` → trigger a new deploy.
-   - **Code:** replace the `PROD_API_URL` value in `src/config/api.js` with your Render URL and commit.
+   - **Env file (easiest):** replace the URL in `.env.production` with your Render URL and commit — Vite injects it into every production build automatically.
+   - **Netlify:** Netlify → your site → **Site configuration → Environment variables** → add `VITE_API_URL=https://portfolio-backend.onrender.com` → trigger a new deploy (overrides `.env.production`).
+   - **Code:** replace the `PROD_API_URL` value in `src/config/api.js` and commit.
 3. The contact form on the live site now POSTs to your Render backend (`/api/contact`). CORS is already configured to allow it.
 
 > **Note:** gunicorn is a Unix-only server, so keep using `python app.py` (via `npm run backend`) for local development on Windows — the `Procfile` is only used by deployment platforms.
