@@ -1,0 +1,31 @@
+# Render Blueprint — deploys the Flask backend as a Web Service.
+#
+# Usage:
+#   1. Commit this file and push to GitHub.
+#   2. In Render: New -> Blueprint -> connect your repository.
+#   3. Render creates the service using these settings.
+#   4. Enter the values for EMAIL_ADDRESS, EMAIL_PASSWORD, RECIPIENT_EMAIL
+#      when prompted (they are marked `sync: false` so they are set manually
+#      and never committed to the repo).
+#
+# Your backend will be available at https://<service-name>.onrender.com
+# (health check at /api/health).
+services:
+  - type: web
+    name: portfolio-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: EMAIL_ADDRESS
+        sync: false
+      - key: EMAIL_PASSWORD
+        sync: false
+      - key: RECIPIENT_EMAIL
+        sync: false
+      - key: SMTP_SERVER
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: "587"

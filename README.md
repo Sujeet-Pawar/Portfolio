@@ -215,16 +215,28 @@ The repository includes a `netlify.toml` config (build command `npm run build`, 
 2. Set `VITE_API_URL` to your deployed backend URL if needed.
 3. Deploy — the `dist` output is served automatically.
 
-### Backend — Render
+### Backend — Render (production)
 
-The backend runs with **gunicorn** (a production WSGI server) and binds to the `PORT` env var that Render sets automatically:
+The backend runs with **gunicorn** (a production WSGI server) and binds to the `PORT` env var that Render sets automatically. Two deployment options:
 
-1. Create a new **Web Service** in Render and connect your repository.
-2. Set **Root Directory** to `backend` (the Flask app lives in the `backend/` folder).
-3. Set **Build Command** to `pip install -r requirements.txt`.
-4. Set **Start Command** to `gunicorn app:app --bind 0.0.0.0:$PORT`.
-5. Set the **Environment Variables** from `backend/env.example` in the Render dashboard (Render injects `PORT` itself).
-6. Deploy, then set the frontend's `VITE_API_URL` to `https://<your-service>.onrender.com` and redeploy on Netlify so the contact form points at the live backend.
+**Option A — Render Blueprint (recommended):** a `render.yaml` is included at the repo root. In Render, choose **New → Blueprint**, connect the repository, and Render creates the service automatically (root directory `backend`, gunicorn start command, health check at `/api/health`). Enter `EMAIL_ADDRESS`, `EMAIL_PASSWORD`, and `RECIPIENT_EMAIL` when prompted — these secrets are set in the dashboard, never committed to the repo.
+
+**Option B — Manual Web Service:**
+
+1. **New → Web Service** → connect the repository.
+2. **Root Directory:** `backend` (the Flask app lives in the `backend/` folder).
+3. **Build Command:** `pip install -r requirements.txt`.
+4. **Start Command:** `gunicorn app:app --bind 0.0.0.0:$PORT`.
+5. **Environment Variables:** `EMAIL_ADDRESS`, `EMAIL_PASSWORD`, `RECIPIENT_EMAIL`, `SMTP_SERVER=smtp.gmail.com`, `SMTP_PORT=587` (Render injects `PORT` itself).
+6. Deploy — your backend URL will be `https://<service-name>.onrender.com`.
+
+### Connecting the Frontend to the Backend in Production
+
+1. After the backend deploys, copy its URL, e.g. `https://portfolio-backend.onrender.com`.
+2. Point the frontend at it (pick one):
+   - **Netlify (recommended):** Netlify → your site → **Site configuration → Environment variables** → add `VITE_API_URL=https://portfolio-backend.onrender.com` → trigger a new deploy.
+   - **Code:** replace the `PROD_API_URL` value in `src/config/api.js` with your Render URL and commit.
+3. The contact form on the live site now POSTs to your Render backend (`/api/contact`). CORS is already configured to allow it.
 
 > **Note:** gunicorn is a Unix-only server, so keep using `python app.py` (via `npm run backend`) for local development on Windows — the `Procfile` is only used by deployment platforms.
 
