@@ -215,13 +215,18 @@ The repository includes a `netlify.toml` config (build command `npm run build`, 
 2. Set `VITE_API_URL` to your deployed backend URL if needed.
 3. Deploy — the `dist` output is served automatically.
 
-### Backend — Heroku / Railway
+### Backend — Render
 
-The backend includes a `Procfile` and `runtime.txt` for platform deployment:
+The backend runs with **gunicorn** (a production WSGI server) and binds to the `PORT` env var that Render sets automatically:
 
-1. Point your platform to the `backend/` directory (or set the root accordingly).
-2. Set the environment variables from `backend/env.example` in your platform dashboard.
-3. Deploy — the app will run `python app.py` on the platform-assigned port.
+1. Create a new **Web Service** in Render and connect your repository.
+2. Set **Root Directory** to `backend` (the Flask app lives in the `backend/` folder).
+3. Set **Build Command** to `pip install -r requirements.txt`.
+4. Set **Start Command** to `gunicorn app:app --bind 0.0.0.0:$PORT`.
+5. Set the **Environment Variables** from `backend/env.example` in the Render dashboard (Render injects `PORT` itself).
+6. Deploy, then set the frontend's `VITE_API_URL` to `https://<your-service>.onrender.com` and redeploy on Netlify so the contact form points at the live backend.
+
+> **Note:** gunicorn is a Unix-only server, so keep using `python app.py` (via `npm run backend`) for local development on Windows — the `Procfile` is only used by deployment platforms.
 
 ## Running Tests
 
