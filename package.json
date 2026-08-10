@@ -8,14 +8,11 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "backend": "cd backend && python app.py",
+    "backend": "cd backend && node server.js",
     "dev:full": "concurrently \"npm run dev\" \"npm run backend\"",
     "netlify:build": "npm run build",
     "netlify:dev": "npm run dev",
-    "test": "node test-website.js",
-    "test:local": "BACKEND_URL=http://localhost:5000 FRONTEND_URL=http://localhost:5173 node test-website.js",
-    "test:live": "node test-website.js",
-    "test:email": "cd backend && python test_email.py"
+    "test:email": "cd backend && node test_email.js"
   },
   "dependencies": {
     "framer-motion": "^12.23.16",

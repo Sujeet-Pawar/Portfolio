@@ -1,0 +1,21 @@
+{
+  "name": "portfolio-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Flask-free Node.js backend for the portfolio contact form",
+  "main": "server.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test:email": "node test_email.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "nodemailer": "^6.9.16"
+  }
+}

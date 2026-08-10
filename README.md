@@ -1,6 +1,6 @@
 # Sujeet Pawar — Portfolio Website
 
-A modern, professional portfolio website for **Sujeet Pawar**, a Computer Science Engineering student specializing in **Artificial Intelligence & Machine Learning**. Built with **React (Vite)** on the frontend and a **Python Flask** API on the backend, featuring a dark theme with neon orange/yellow accents, smooth animations, and a fully responsive design.
+A modern, professional portfolio website for **Sujeet Pawar**, a Computer Science Engineering student specializing in **Artificial Intelligence & Machine Learning**. Built with **React (Vite)** on the frontend and a **Node.js (Express)** API on the backend, featuring a dark theme with neon orange/yellow accents, smooth animations, and a fully responsive design.
 
 <p align="center">
   <a href="https://reactjs.org" target="_blank"><img src="https://img.shields.io/badge/React-19-61dafb?logo=react&logoColor=white&style=flat-square" alt="React"></a>
@@ -61,17 +61,16 @@ A modern, professional portfolio website for **Sujeet Pawar**, a Computer Scienc
 
 | Technology      | Purpose                         |
 | --------------- | ------------------------------- |
-| Python Flask    | Web framework (API server)      |
-| Flask-CORS      | Cross-origin resource sharing   |
-| python-dotenv   | Environment variable loading    |
-| SMTP            | Email delivery for the contact form |
+| Node.js / Express | Web framework (API server)     |
+| Nodemailer      | SMTP email delivery for the contact form |
+| cors            | Cross-origin resource sharing   |
+| dotenv          | Environment variable loading    |
 
 ## Getting Started
 
 ### Prerequisites
 
-- **Node.js** 20.19+ (required by Vite 7)
-- **Python** 3.11+ (see `backend/runtime.txt`)
+- **Node.js** 18+ (Vite 7 requires 20.19+ for the frontend)
 - **npm** (or yarn/pnpm)
 
 ### Installation
@@ -93,7 +92,7 @@ A modern, professional portfolio website for **Sujeet Pawar**, a Computer Scienc
 
    ```bash
    cd backend
-   pip install -r requirements.txt
+   npm install
    cp env.example .env
    ```
 
@@ -168,11 +167,11 @@ portfolio/
 │   ├── index.css
 │   └── main.jsx
 ├── backend/
-│   ├── app.py
-│   ├── requirements.txt
+│   ├── server.js
+│   ├── package.json
+│   ├── test_email.js
 │   ├── env.example
-│   ├── runtime.txt
-│   └── Procfile
+│   └── .env (local, gitignored)
 ├── netlify.toml
 ├── _redirects
 ├── vite.config.js
@@ -217,16 +216,16 @@ The repository includes a `netlify.toml` config (build command `npm run build`, 
 
 ### Backend — Render (production)
 
-The backend runs with **gunicorn** (a production WSGI server) and binds to the `PORT` env var that Render sets automatically. Two deployment options:
+The backend is a **Node.js/Express** app (no Python required) and binds to the `PORT` env var that Render sets automatically. Two deployment options:
 
-**Option A — Render Blueprint (recommended):** a `render.yaml` is included at the repo root. In Render, choose **New → Blueprint**, connect the repository, and Render creates the service automatically (root directory `backend`, gunicorn start command, health check at `/api/health`). Enter `EMAIL_ADDRESS`, `EMAIL_PASSWORD`, and `RECIPIENT_EMAIL` when prompted — these secrets are set in the dashboard, never committed to the repo.
+**Option A — Render Blueprint (recommended):** a `render.yaml` is included at the repo root. In Render, choose **New → Blueprint**, connect the repository, and Render creates the service automatically (root directory `backend`, build `npm install`, start `node server.js`, health check at `/api/health`). Enter `EMAIL_ADDRESS`, `EMAIL_PASSWORD`, and `RECIPIENT_EMAIL` when prompted — these secrets are set in the dashboard, never committed to the repo.
 
 **Option B — Manual Web Service:**
 
 1. **New → Web Service** → connect the repository.
-2. **Root Directory:** `backend` (the Flask app lives in the `backend/` folder).
-3. **Build Command:** `pip install -r requirements.txt`.
-4. **Start Command:** `gunicorn app:app --bind 0.0.0.0:$PORT`.
+2. **Runtime:** Node; **Root Directory:** `backend` (the Express app lives in the `backend/` folder).
+3. **Build Command:** `npm install`.
+4. **Start Command:** `node server.js`.
 5. **Environment Variables:** `EMAIL_ADDRESS`, `EMAIL_PASSWORD`, `RECIPIENT_EMAIL`, `SMTP_SERVER=smtp.gmail.com`, `SMTP_PORT=587` (Render injects `PORT` itself).
 6. Deploy — your backend URL will be `https://<service-name>.onrender.com`.
 
@@ -239,22 +238,17 @@ The backend runs with **gunicorn** (a production WSGI server) and binds to the `
    - **Code:** replace the `PROD_API_URL` value in `src/config/api.js` and commit.
 3. The contact form on the live site now POSTs to your Render backend (`/api/contact`). CORS is already configured to allow it.
 
-> **Note:** gunicorn is a Unix-only server, so keep using `python app.py` (via `npm run backend`) for local development on Windows — the `Procfile` is only used by deployment platforms.
+> **Note:** `npm run backend` starts the Node backend locally on port 5000 — the same command used by the deployment platform.
 
 ## Running Tests
 
-The project includes a website smoke test and an email test script:
+The project includes a backend email delivery test:
 
 ```bash
-# Website smoke test against the live deployment
-npm run test
-
-# Local website test (requires both servers running)
-npm run test:local
-
-# Backend email delivery test
 npm run test:email
 ```
+
+This sends a test email through the backend's SMTP configuration to verify the contact form pipeline works.
 
 ## Contact
 
@@ -264,4 +258,4 @@ npm run test:email
 
 ---
 
-Built with ❤️ using React, Vite, and Flask.
+Built with ❤️ using React, Vite, and Node.js.

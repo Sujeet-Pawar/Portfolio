@@ -1,4 +1,4 @@
-# Render Blueprint — deploys the Flask backend as a Web Service.
+# Render Blueprint — deploys the Node.js backend as a Web Service.
 #
 # Usage:
 #   1. Commit this file and push to GitHub.
@@ -13,10 +13,10 @@
 services:
   - type: web
     name: portfolio-backend
-    runtime: python
+    runtime: node
     rootDir: backend
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
+    buildCommand: npm install
+    startCommand: node server.js
     healthCheckPath: /api/health
     envVars:
       - key: EMAIL_ADDRESS
