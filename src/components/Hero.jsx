@@ -99,7 +99,7 @@ const Hero = () => {
             
             <motion.div className="hero-social" variants={itemVariants}>
               <a 
-                href="https://github.com/sujeetpawar" 
+                href="https://github.com/Sujeet-Pawar" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 aria-label="Visit my GitHub profile"

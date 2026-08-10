@@ -197,7 +197,7 @@ const Projects = () => {
                   
                   <div className="project-links">
                     <a 
-                      href={`https://github.com/sujeetpawar/${project.github}`}
+                      href={`https://github.com/Sujeet-Pawar/${project.github}`}
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="project-link"
@@ -279,7 +279,7 @@ const Projects = () => {
               
               <div className="modal-links">
                 <a 
-                  href={`https://github.com/sujeetpawar/${selectedProject.github}`}
+                  href={`https://github.com/Sujeet-Pawar/${selectedProject.github}`}
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="btn btn-primary"

@@ -42,7 +42,7 @@ const Contact = () => {
     {
       icon: <FaGithub />,
       name: "GitHub",
-      url: "https://github.com/sujeetpawar",
+      url: "https://github.com/Sujeet-Pawar",
       color: "#ff6b35" // Neon Orange
     },
     {
